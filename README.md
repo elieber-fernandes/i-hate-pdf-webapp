@@ -2,20 +2,6 @@
 
 This project is a web application that allows users to upload PDF files, convert them to images, and download the converted images. It is built using Flask and utilizes the `pdf2image` library for the conversion process.
 
-## Project Structure
-
-```
-pdf-img-webapp
-├── app.py                # Main entry point of the web application
-├── requirements.txt      # Lists the dependencies required for the project
-├── src
-│   ├── pdf_converter.py   # Contains the PDF to JPG conversion logic
-│   └── templates
-│       └── index.html     # HTML template for the main page
-│   └── static
-│       └── README.md      # Information about static assets (currently empty)
-├── README.md              # Documentation for the project
-```
 
 ## Requirements
 
