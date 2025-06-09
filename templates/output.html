@@ -8,22 +8,8 @@
 <body>
 <div class="container py-5">
     <h1 class="mb-4">Arquivos Convertidos</h1>
-    {% if zip_link %}
-        <div class="alert alert-info">
-            <a href="{{ zip_link }}" class="btn btn-success">Baixar todas as imagens (.zip)</a>
-        </div>
-    {% endif %}
-    <div class="row">
-        {% for filename, link in files %}
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <img src="{{ link }}" class="card-img-top" alt="{{ filename }}" style="object-fit:contain;max-height:250px;">
-                <div class="card-body text-center">
-                    <a href="{{ link }}" download class="btn btn-primary btn-sm">Baixar {{ filename }}</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+    <div class="alert alert-info text-center">
+        <a href="{{ zip_link }}" class="btn btn-success btn-lg">Baixar todas as imagens (.zip)</a>
     </div>
     <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">Voltar</a>
 </div>

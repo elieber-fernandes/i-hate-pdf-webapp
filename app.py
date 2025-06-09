@@ -19,16 +19,17 @@ def index():
 def upload_file():
     if 'file' not in request.files:
         return "No file part", 400
-    file = request.files['file']
-    if file.filename == '':
+    files = request.files.getlist('file')
+    if not files or all(f.filename == '' for f in files):
         return "No selected file", 400
-    if file and file.filename and file.filename.endswith('.pdf'):
-        pdf_path = os.path.join(UPLOAD_FOLDER, file.filename)
-        file.save(pdf_path)
-        pdf_para_jpg(pdf_path, OUTPUT_FOLDER)
-        # Após converter, redireciona para a página de output
-        return redirect(url_for('output_files'))
-    return "Invalid file type", 400
+    for file in files:
+        if file and file.filename and file.filename.endswith('.pdf'):
+            pdf_path = os.path.join(UPLOAD_FOLDER, file.filename)
+            file.save(pdf_path)
+            pdf_para_jpg(pdf_path, OUTPUT_FOLDER)
+        else:
+            return "Invalid file type", 400
+    return redirect(url_for('output_files'))
 
 @app.route('/output')
 def output_files():
