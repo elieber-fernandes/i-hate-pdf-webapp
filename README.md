@@ -1,4 +1,4 @@
-# PDF to Image Web Application
+# PDF to JPG Web Application
 
 This project is a web application that allows users to upload PDF files, convert them to images, and download the converted images. It is built using Flask and utilizes the `pdf2image` library for the conversion process.
 
