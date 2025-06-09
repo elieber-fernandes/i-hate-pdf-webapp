@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Arquivos Convertidos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container py-5">
+    <h1 class="mb-4">Arquivos Convertidos</h1>
+    {% if zip_link %}
+        <div class="alert alert-info">
+            <a href="{{ zip_link }}" class="btn btn-success">Baixar todas as imagens (.zip)</a>
+        </div>
+    {% endif %}
+    <div class="row">
+        {% for filename, link in files %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <img src="{{ link }}" class="card-img-top" alt="{{ filename }}" style="object-fit:contain;max-height:250px;">
+                <div class="card-body text-center">
+                    <a href="{{ link }}" download class="btn btn-primary btn-sm">Baixar {{ filename }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">Voltar</a>
+</div>
+</body>
+</html>
