@@ -19,8 +19,8 @@ Permite upload de múltiplos PDFs, converte todas as páginas e gera arquivos pr
 
 1. Clone o repositório:
     ```bash
-    git clone https://github.com/elieber-fernandes/pdf-img-webapp
-    cd pdf-img-webapp
+    git clone https://github.com/elieber-fernandes/i-hate-pdf-webapp
+    cd i-hate-pdf-webapp
     ```
 
 2. Crie um ambiente virtual e instale as dependências:
