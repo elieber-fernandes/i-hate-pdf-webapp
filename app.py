@@ -1,12 +1,15 @@
-from flask import Flask, request, render_template, send_from_directory, redirect, url_for
+from flask import Flask, request, render_template, send_from_directory, redirect, url_for, send_file, after_this_request
 import os
 from src.pdf_converter import pdf_para_jpg
 import zipfile
 import io
+import shutil
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'output'
+
+HOME = os.path.expanduser('~')
+UPLOAD_FOLDER = os.path.join(HOME, 'uploads')
+OUTPUT_FOLDER = os.path.join(HOME, 'output')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -17,6 +20,18 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    # Limpa as pastas antes de processar novos arquivos
+    for folder in [UPLOAD_FOLDER, OUTPUT_FOLDER]:
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(f'Erro ao deletar {file_path}: {e}')
+
     if 'file' not in request.files:
         return "No file part", 400
     files = request.files.getlist('file')
@@ -33,12 +48,18 @@ def upload_file():
 
 @app.route('/output')
 def output_files():
-    files = os.listdir(OUTPUT_FOLDER)
-    file_links = [url_for('download_file', filename=f) for f in files]
+    files = sorted(os.listdir(OUTPUT_FOLDER))  # Ordena para garantir ordem consistente
+    thumbnails = files[:10]  # Pega as 10 primeiras imagens
     zip_link = None
-    if len(files) > 1:
+    if len(files) > 0:
         zip_link = url_for('download_zip')
-    return render_template('output.html', files=zip(files, file_links), zip_link=zip_link)
+    # Gera links para as miniaturas
+    thumb_links = [url_for('download_file', filename=f) for f in thumbnails]
+    return render_template(
+        'output.html',
+        thumbnails=zip(thumbnails, thumb_links),
+        zip_link=zip_link
+    )
 
 @app.route('/output/all.zip')
 def download_zip():
@@ -49,17 +70,26 @@ def download_zip():
             file_path = os.path.join(OUTPUT_FOLDER, filename)
             zf.write(file_path, arcname=filename)
     memory_file.seek(0)
-    return send_from_directory(
-        directory=OUTPUT_FOLDER,
-        filename='all.zip',
+
+    @after_this_request
+    def cleanup(response):
+        for folder in [UPLOAD_FOLDER, OUTPUT_FOLDER]:
+            for filename in os.listdir(folder):
+                file_path = os.path.join(folder, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print(f'Erro ao deletar {file_path}: {e}')
+        return response
+
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
         as_attachment=True,
-        mimetype='application/zip'
-    ) if False else (
-        # Serve o arquivo zip diretamente da memória
-        (lambda f: (f, 200, {
-            'Content-Type': 'application/zip',
-            'Content-Disposition': 'attachment; filename=all.zip'
-        }))(memory_file)
+        download_name='all.zip'
     )
 
 @app.route('/output/<filename>')

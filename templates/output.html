@@ -4,14 +4,66 @@
     <meta charset="UTF-8">
     <title>Arquivos Convertidos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+            min-height: 100vh;
+        }
+        .thumb-img {
+            max-width: 100px;
+            max-height: 140px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            margin: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .card {
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        }
+        .btn-success {
+            border-radius: 25px;
+            padding: 10px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 <body>
 <div class="container py-5">
-    <h1 class="mb-4">Arquivos Convertidos</h1>
-    <div class="alert alert-info text-center">
-        <a href="{{ zip_link }}" class="btn btn-success btn-lg">Baixar todas as imagens (.zip)</a>
+    <div class="card p-4 mx-auto" style="max-width: 700px;">
+        <h2 class="mb-4 text-center">Arquivos Convertidos</h2>
+        {% if thumbnails %}
+            <h5 class="text-center">Miniaturas das primeiras páginas:</h5>
+            <div class="d-flex flex-wrap justify-content-center mb-4">
+                {% for filename, link in thumbnails %}
+                    <div class="text-center mr-3 mb-3">
+                        <img src="{{ link }}" class="thumb-img" alt="{{ filename }}">
+                        <div style="font-size: 0.8em;">{{ filename }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="alert alert-info text-center">
+            <a href="{{ zip_link }}" class="btn btn-success btn-lg">Baixar todas as imagens (.zip)</a>
+        </div>
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Voltar</a>
+        </div>
     </div>
-    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">Voltar</a>
 </div>
+<footer class="text-center mt-5 mb-3">
+    <hr>
+    <div>
+        <a href="https://www.linkedin.com/in/eliebermartins/" target="_blank" class="mx-2" title="LinkedIn">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" width="32" style="vertical-align:middle;">
+        </a>
+        <a href="https://github.com/elieber-fernandes" target="_blank" class="mx-2" title="GitHub">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" width="32" style="vertical-align:middle;">
+        </a>
+    </div>
+    <small class="text-muted">Desenvolvido por Elieber Martins</small>
+</footer>
 </body>
 </html>
