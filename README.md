@@ -7,12 +7,13 @@ Permite upload de múltiplos PDFs, converte todas as páginas e gera um arquivo 
 
 - **Python 3**
 - **Flask** – Framework web
-- **pdf2image** – Conversão de PDF para imagens
+- **pdf2image** – Conversão de PDF para imagens (JPG/PNG)
+- **pdfminer.six** – Extração de texto de PDFs
+- **pdf2docx** – Conversão de PDF para DOCX
+- **python-pptx** – Geração de apresentações PowerPoint
 - **Pillow** – Manipulação de imagens
 - **Bootstrap 4** – Interface moderna e responsiva
 - **Jinja2** – Templates HTML
-- **Gunicorn** – Servidor WSGI (para deploy)
-- **shutil, zipfile, io, os** – Utilitários do Python
 
 ## 💻 Como rodar localmente
 
@@ -38,6 +39,16 @@ Permite upload de múltiplos PDFs, converte todas as páginas e gera um arquivo 
 ## 📦 Deploy
 
 - Suporta deploy fácil no [PythonAnywhere](https://www.pythonanywhere.com/), [Render](https://render.com/) ou qualquer serviço compatível com Flask.
+
+
+## 🛠️ Funcionalidades
+
+- **PDF → JPG**: Converte cada página do PDF em uma imagem JPG.
+- **PDF → PNG**: Converte cada página do PDF em uma imagem PNG.
+- **PDF → TXT**: Extrai todo o texto do PDF para um arquivo .txt.
+- **PDF → DOCX**: Converte o PDF para um arquivo Word editável (.docx).
+- **PDF → PowerPoint (PPTX)**: Cada página do PDF vira um slide com a imagem da página.
+
 
 ## 👨‍💻 Autor
 
