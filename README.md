@@ -1,6 +1,6 @@
 # I HATE PDF ☠️ – Conversor PDF Completo
 
-Conversor web moderno para transformar arquivos PDF em vários formatos: **JPG, PNG, TXT, DOCX e PowerPoint (PPTX)**.  
+Conversor web moderno para transformar arquivos PDF em vários formatos: **JPG, PNG, TXT, DOCX e PPTX**.  
 Permite upload de múltiplos PDFs, converte todas as páginas e gera arquivos prontos para download individual ou em lote (.zip).
 
 ## 🚀 Tecnologias Utilizadas
