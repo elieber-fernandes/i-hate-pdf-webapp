@@ -37,9 +37,9 @@
 
                     <h1 class="mb-2">I HATE PDF ☠️</h1>
                     <img src="https://img.icons8.com/ios-filled/100/000000/pdf.png" class="logo" alt="PDF">
-                    
-                    <h3 class="mb-2">Conversor PDF para JPG</h3>
-                    <p class="text-muted mb-0">Converta um ou mais PDFs em imagens JPG de forma rápida e fácil.</p>
+
+                    <h3 class="mb-2">Conversor PDF</h3>
+                    <p class="text-muted mb-0">Converta um ou mais PDFs de forma rápida e fácil.</p>
                 </div>
                 {% if error %}
                     <div class="alert alert-danger">{{ error }}</div>
@@ -51,6 +51,16 @@
                     <div class="form-group">
                         <label for="file"><strong>Selecione um ou mais arquivos PDF:</strong></label>
                         <input type="file" class="form-control-file" id="file" name="file" accept=".pdf" multiple required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo"><strong>Tipo de conversão:</strong></label>
+                        <select class="form-control" id="tipo" name="tipo" required>
+                            <option value="jpg">PDF para JPG</option>
+                            <option value="png">PDF para PNG</option>
+                            <option value="txt">PDF para TXT</option>
+                            <option value="docx">PDF para DOCX</option>
+                            <option value="pptx">PDF para PPTX</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block mt-3">Converter</button>
                 </form>

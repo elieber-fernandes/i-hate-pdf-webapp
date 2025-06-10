@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, send_from_directory, redirect, url_for, send_file, after_this_request
 import os
-from src.pdf_converter import pdf_para_jpg
+from src.pdf_converter import pdf_para_jpg, pdf_para_png, pdf_para_txt, pdf_para_docx, pdf_para_pptx
 import zipfile
 import io
 import shutil
@@ -35,38 +35,55 @@ def upload_file():
     if 'file' not in request.files:
         return "No file part", 400
     files = request.files.getlist('file')
+    tipo = request.form.get('tipo', 'jpg')  # Pega o tipo do formulário
     if not files or all(f.filename == '' for f in files):
         return "No selected file", 400
     for file in files:
         if file and file.filename and file.filename.endswith('.pdf'):
             pdf_path = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(pdf_path)
-            pdf_para_jpg(pdf_path, OUTPUT_FOLDER)
+            # Chama a função de conversão correta
+            if tipo == 'jpg':
+                pdf_para_jpg(pdf_path, OUTPUT_FOLDER)
+            elif tipo == 'png':
+                pdf_para_png(pdf_path, OUTPUT_FOLDER)
+            elif tipo == 'txt':
+                pdf_para_txt(pdf_path, OUTPUT_FOLDER)
+            elif tipo == 'docx':
+                pdf_para_docx(pdf_path, OUTPUT_FOLDER)
+            elif tipo == 'pptx':
+                pdf_para_pptx(pdf_path, OUTPUT_FOLDER)
+            else:
+                return "Tipo de conversão não suportado", 400
         else:
             return "Invalid file type", 400
-    return redirect(url_for('output_files'))
+    return redirect(url_for('output_files', tipo=tipo))
 
 @app.route('/output')
 def output_files():
-    files = sorted(os.listdir(OUTPUT_FOLDER))  # Ordena para garantir ordem consistente
-    total_paginas = len(files)
-    thumbnails = files[:10]  # Pega as 10 primeiras imagens
-    zip_link = None
+    tipo = request.args.get('tipo', 'jpg')
+    files = sorted(os.listdir(OUTPUT_FOLDER))
+    thumbnails = []
+    if tipo in ['jpg', 'png']:
+        thumbnails = files[:10]
+        thumb_links = [url_for('download_file', filename=f) for f in thumbnails]
+        thumbnails = zip(thumbnails, thumb_links)
+    else:
+        thumbnails = []
+        thumb_links = []
+    zip_link = url_for('download_zip')
     individual_links = None
-
-    if total_paginas > 0:
-        zip_link = url_for('download_zip')
-        if total_paginas <= 5:
-            individual_links = [
-                (f, url_for('download_file', filename=f)) for f in files
-            ]
-
-    thumb_links = [url_for('download_file', filename=f) for f in thumbnails]
+    if len(files) > 0 and len(files) <= 5 and tipo in ['jpg', 'png']:
+        individual_links = [
+            (f, url_for('download_file', filename=f)) for f in files
+        ]
     return render_template(
         'output.html',
-        thumbnails=zip(thumbnails, thumb_links),
+        thumbnails=thumbnails,
         zip_link=zip_link,
-        individual_links=individual_links
+        individual_links=individual_links,
+        tipo=tipo,
+        files=files  # Para mostrar arquivos TXT, DOCX, PPTX
     )
 
 @app.route('/output/all.zip')
