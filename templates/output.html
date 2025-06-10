@@ -37,10 +37,18 @@
         {% if thumbnails %}
             <h5 class="text-center">Miniaturas das primeiras páginas:</h5>
             <div class="d-flex flex-wrap justify-content-center mb-4">
-                {% for filename, link in thumbnails %}
+                {% for (filename, link) in thumbnails %}
                     <div class="text-center mr-3 mb-3">
                         <img src="{{ link }}" class="thumb-img" alt="{{ filename }}">
                         <div style="font-size: 0.8em;">{{ filename }}</div>
+                        {% if individual_links %}
+                            <!-- Procura o link individual correspondente -->
+                            {% for fname, flink in individual_links %}
+                                {% if fname == filename %}
+                                    <a href="{{ flink }}" class="btn btn-outline-primary btn-sm mt-2" download>Baixar</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -48,6 +56,7 @@
         <div class="alert alert-info text-center">
             <a href="{{ zip_link }}" class="btn btn-success btn-lg">Baixar todas as imagens (.zip)</a>
         </div>
+        
         <div class="text-center">
             <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Voltar</a>
         </div>

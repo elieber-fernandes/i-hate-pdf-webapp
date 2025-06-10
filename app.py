@@ -49,16 +49,24 @@ def upload_file():
 @app.route('/output')
 def output_files():
     files = sorted(os.listdir(OUTPUT_FOLDER))  # Ordena para garantir ordem consistente
+    total_paginas = len(files)
     thumbnails = files[:10]  # Pega as 10 primeiras imagens
     zip_link = None
-    if len(files) > 0:
+    individual_links = None
+
+    if total_paginas > 0:
         zip_link = url_for('download_zip')
-    # Gera links para as miniaturas
+        if total_paginas <= 5:
+            individual_links = [
+                (f, url_for('download_file', filename=f)) for f in files
+            ]
+
     thumb_links = [url_for('download_file', filename=f) for f in thumbnails]
     return render_template(
         'output.html',
         thumbnails=zip(thumbnails, thumb_links),
-        zip_link=zip_link
+        zip_link=zip_link,
+        individual_links=individual_links
     )
 
 @app.route('/output/all.zip')
