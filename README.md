@@ -19,7 +19,7 @@ Permite upload de múltiplos PDFs, converte todas as páginas e gera arquivos pr
 
 1. Clone o repositório:
     ```bash
-    [git clone https://github.com/seuusuario/seurepositorio.git](https://github.com/elieber-fernandes/pdf-img-webapp)
+    git clone https://github.com/elieber-fernandes/pdf-img-webapp
     cd pdf-img-webapp
     ```
 
